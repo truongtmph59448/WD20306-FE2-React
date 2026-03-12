@@ -2,7 +2,7 @@ import { Toaster } from "react-hot-toast";
 import { Link } from "react-router-dom";
 import { Button } from "antd";
 import { Layout } from "antd";
-import Lab2 from "./pages/Lab2";
+
 const { Header, Content, Footer } = Layout;
 function App() {
   //
@@ -50,7 +50,7 @@ function App() {
           <Content style={{ padding: 20 }}>Content</Content>
           <Footer>Footer</Footer>
         </Layout>
-        <Lab2 />
+    
       </div>
     
       <Toaster />
