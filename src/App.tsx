@@ -1,8 +1,9 @@
 import { Toaster } from "react-hot-toast";
-import { Link, Routes, Route } from "react-router-dom"; 
-import { Button } from "antd";
-import { Layout } from "antd";
+import { Link, Routes, Route } from "react-router-dom";
+import { Button, Layout } from "antd";
 import Lab4 from "./pages/Lab4";
+import Lab5 from "./pages/Lab5";
+import Lab6 from "./pages/Lab6";
 
 const { Header, Content, Footer } = Layout;
 
@@ -11,23 +12,20 @@ function App() {
     <>
       <nav className="bg-blue-600 text-white shadow">
         <div className="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
-          <Link to="#" className="text-xl font-semibold">
+          <Link to="/" className="text-xl font-semibold">
             <strong>WEB2091 App</strong>
           </Link>
 
           <div className="hidden md:flex items-center space-x-8">
-            <Link to="#">Trang chủ</Link>
+            <Link to="/">Trang chủ</Link>
             <Link to="/list">Danh sách</Link>
             <Link to="/lab4">Thêm mới</Link>
           </div>
+
           <div className="hidden md:flex items-center space-x-6">
-  <Link to="#" className="hover:text-gray-200">
-    Đăng nhập
-  </Link>
-  <Link to="#" className="hover:text-gray-200">
-    Đăng ký
-  </Link>
-</div>
+            <Link to="#">Đăng nhập</Link>
+            <Link to="#">Đăng ký</Link>
+          </div>
         </div>
       </nav>
 
@@ -36,18 +34,20 @@ function App() {
           Chào mừng đến với WEB2091
         </h1>
 
-        <Button type="primary">Click me</Button>
-
         <Layout>
           <Header style={{ color: "white" }}>Header</Header>
-          <Content style={{ padding: 20 }}>Content</Content>
+
+          <Content style={{ padding: 20 }}>
+            <Routes>
+              <Route path="/" element={<Lab5 />} />
+              <Route path="/list" element={<Lab5 />} />
+              <Route path="/lab4" element={<Lab4 />} />
+              <Route path="/edit/:id" element={<Lab6 />} />
+            </Routes>
+          </Content>
+
           <Footer>Footer</Footer>
         </Layout>
-
-
-        <Routes>
-          <Route path="/lab4" element={<Lab4 />} />
-        </Routes>
       </div>
 
       <Toaster />

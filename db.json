@@ -1,4 +1,40 @@
 {
-  "products": [],
+  "stories": [
+    {
+      "id": 1,
+      "title": "Dragon Ball",
+      "author": "Akira Toriyama",
+      "description": "Câu chuyện về Goku và hành trình tìm ngọc rồng",
+      "year": 1984,
+      "genre": "Action",
+      "image": "https://upload.wikimedia.org/wikipedia/vi/4/4f/Dragon_Ball_Super_artwork.jpg",
+      "views": 100000,
+      "createdAt": "2026-03-21"
+    },
+    {
+      "id": 2,
+      "title": "Attack On Titan",
+      "author": "Hajime Isayama",
+      "description": "Nhân loại chiến đấu với Titan khổng lồ",
+      "year": 2009,
+      "genre": "Dark Fantasy",
+      "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSXZLQGN5inUbUYyz9Oj6smYPij-2bhDy8taA&s",
+      "views": 95000,
+      "createdAt": "2026-03-21"
+    },
+    {
+      "id": 3,
+      "title": "Naruto",
+      "author": "Masashi Kishimoto",
+      "description": "Hành trình trở thành Hokage của Naruto",
+      "year": 1999,
+      "genre": "Adventure",
+      "image": "https://upload.wikimedia.org/wikipedia/en/9/94/NarutoCoverTankobon1.jpg",
+      "views": 120000,
+      "createdAt": "2026-03-21"
+    }
+  ],
+  "categories": [
+  ],
   "users": []
 }
