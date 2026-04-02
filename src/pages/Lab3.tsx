@@ -1,77 +1,151 @@
-import { Button, Card, Row, Col, Result } from "antd";
-import { LogoutOutlined, UserOutlined } from "@ant-design/icons";
-import { useUser } from "../context/UserContext";
+import { Routes, Route } from "react-router-dom";
+import { Form, Input, Button, InputNumber } from "antd";
 
-const LogoutPage = () => {
-  const { user, setUser } = useUser();
-
-  const handleLogout = () => {
-    setUser(null);
-    alert("✅ Đăng xuất thành công!");
+function Login() {
+  const onFinish = (values: any) => {
+    console.log("Login:", values);
   };
 
   return (
-    <div style={{ padding: "50px 20px", minHeight: "80vh" }}>
-      {user ? (
-        <Row gutter={[24, 24]} justify="center">
-          <Col xs={24} sm={20} md={12} lg={8}>
-            <Card
-              bordered={false}
-              style={{ boxShadow: "0 2px 8px rgba(0,0,0,0.1)" }}
-            >
-              <Result
-                status="success"
-                title="✅ Bạn đã đăng nhập"
-                subTitle={`Xin chào ${user.name}`}
-                style={{ paddingBottom: "24px" }}
-              />
+    <Form layout="vertical" onFinish={onFinish} style={{ maxWidth: 400 }}>
+      <Form.Item
+        label="Email"
+        name="email"
+        rules={[{ required: true, message: "Nhập email" }]}
+      >
+        <Input />
+      </Form.Item>
 
-              <div style={{ textAlign: "center", marginBottom: "24px" }}>
-                <div style={{ fontSize: "64px", marginBottom: "16px" }}>
-                  {user.avatar ? (
-                    <img
-                      src={user.avatar}
-                      alt="avatar"
-                      style={{
-                        width: "80px",
-                        height: "80px",
-                        borderRadius: "50%",
-                        objectFit: "cover",
-                      }}
-                    />
-                  ) : (
-                    <UserOutlined style={{ fontSize: "64px" }} />
-                  )}
-                </div>
-                <h2>{user.name}</h2>
-              </div>
+      <Form.Item
+        label="Password"
+        name="password"
+        rules={[{ required: true, message: "Nhập password" }]}
+      >
+        <Input.Password />
+      </Form.Item>
 
-              <Button
-                type="primary"
-                danger
-                size="large"
-                block
-                icon={<LogoutOutlined />}
-                onClick={handleLogout}
-              >
-                🚪 Đăng Xuất
-              </Button>
-            </Card>
-          </Col>
-        </Row>
-      ) : (
-        <Row gutter={[24, 24]} justify="center">
-          <Col xs={24} sm={20} md={12} lg={8}>
-            <Result
-              status="warning"
-              title="Chưa đăng nhập"
-              subTitle="Vui lòng đăng nhập để xem trang này"
-            />
-          </Col>
-        </Row>
-      )}
-    </div>
+      <Button type="primary" htmlType="submit">
+        Đăng nhập
+      </Button>
+    </Form>
   );
-};
+}
 
-export default LogoutPage;
+function Register() {
+  const onFinish = (values: any) => {
+    console.log("Register:", values);
+  };
+
+  return (
+    <Form layout="vertical" onFinish={onFinish} style={{ maxWidth: 500 }}>
+      <Form.Item
+        label="Name"
+        name="name"
+        rules={[{ required: true, message: "Nhập tên" }]}
+      >
+        <Input />
+      </Form.Item>
+
+      <Form.Item
+        label="Email"
+        name="email"
+        rules={[
+          { required: true, message: "Nhập email" },
+          { type: "email", message: "Email không hợp lệ" },
+        ]}
+      >
+        <Input />
+      </Form.Item>
+
+      <Form.Item label="Phone" name="phone">
+        <Input />
+      </Form.Item>
+
+      <Form.Item
+        label="Password"
+        name="password"
+        rules={[
+          { required: true, message: "Nhập password" },
+          { min: 6, message: "Ít nhất 6 ký tự" },
+        ]}
+      >
+        <Input.Password />
+      </Form.Item>
+
+      <Form.Item
+        label="Confirm Password"
+        name="confirmPassword"
+        dependencies={["password"]}
+        rules={[
+          { required: true, message: "Xác nhận password" },
+          ({ getFieldValue }) => ({
+            validator(_, value) {
+              if (!value || getFieldValue("password") === value) {
+                return Promise.resolve();
+              }
+              return Promise.reject("Password không trùng");
+            },
+          }),
+        ]}
+      >
+        <Input.Password />
+      </Form.Item>
+
+      <Button type="primary" htmlType="submit">
+        Đăng ký
+      </Button>
+    </Form>
+  );
+}
+
+function Product() {
+  const onFinish = (values: any) => {
+    console.log("Product:", values);
+  };
+
+  return (
+    <Form layout="vertical" onFinish={onFinish} style={{ maxWidth: 500 }}>
+      <Form.Item
+        label="Tên sản phẩm"
+        name="name"
+        rules={[{ required: true, message: "Nhập tên sản phẩm" }]}
+      >
+        <Input />
+      </Form.Item>
+
+      <Form.Item
+        label="Giá"
+        name="price"
+        rules={[{ required: true, message: "Nhập giá" }]}
+      >
+        <InputNumber style={{ width: "100%" }} />
+      </Form.Item>
+
+      <Form.Item
+        label="Số lượng"
+        name="quantity"
+        rules={[{ required: true, message: "Nhập số lượng" }]}
+      >
+        <InputNumber style={{ width: "100%" }} />
+      </Form.Item>
+
+      <Form.Item label="Mô tả" name="description">
+        <Input.TextArea rows={4} />
+      </Form.Item>
+
+      <Button type="primary" htmlType="submit">
+        Thêm sản phẩm
+      </Button>
+    </Form>
+  );
+}
+
+export default function Lab3() {
+  return (
+    <Routes>
+      <Route path="login" element={<Login />} />
+      <Route path="register" element={<Register />} />
+      <Route path="product" element={<Product />} />
+    </Routes>
+  );
+}
