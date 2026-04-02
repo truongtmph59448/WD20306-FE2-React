@@ -1,73 +1,91 @@
-import { Table } from "antd";
-import { Tag } from "antd";
-import { Button, Space } from "antd";
-const columns1= [
-    {title: 'ID', dataIndex: 'id'},
-    {title: 'Name', dataIndex: 'name'},
-    {title: 'Age', dataIndex: 'age'},
-    {title: 'Major', dataIndex: 'major'},
-];
+import { Button, Card, Input, Space, Row, Col } from "antd";
+import { useState } from "react";
+import { useUser } from "../context/UserContext";
 
-const data1 = [
-    {key: '1', id: 1, name: 'Truong', age: 20, major: 'FE1'},
-    {key: '2', id: 2, name: 'Hai', age: 21, major: 'FE2'},
-];
+const LoginPage = () => {
+  const { setUser } = useUser();
+  const [name, setName] = useState("John Doe");
+  const [avatar, setAvatar] = useState("https://i.pravatar.cc/150?img=1");
 
-const columns2 = [
-  { title: "ID", dataIndex: "id" },
-  { title: "Name", dataIndex: "name" },
-  { title: "Email", dataIndex: "email" },
-  {
-  title: "Status",
-  dataIndex: "status",
-  render: (status: string) => (
-    <Tag color={status === "active" ? "green" : "red"}>
-      {status}
-    </Tag>
-  ),
-},
-{
-  title: "Action",
-  render: () => (
-    <Space>
-      <Button type="primary">Edit</Button>
-      <Button danger>Delete</Button>
-    </Space>
-  ),
-},
-];
+  const handleLogin = () => {
+    if (name.trim()) {
+      setUser({
+        name,
+        avatar: avatar || `https://i.pravatar.cc/150?u=${name}`,
+      });
+      alert("✅ Đăng nhập thành công!");
+    }
+  };
 
-const data2 = [
-  { key: "1", id: 101, name: "Truong", email: "Truong@gmail.com", status: "active" },
-  { key: "2", id: 102, name: "Minh", email: "Minh@gmail.com", status: "inactive" },
-];
-const columns = [
-  { title: "ID", dataIndex: "id" },
-  { title: "Tên sản phẩm", dataIndex: "name" },
-  { title: "Gía", dataIndex: "price" },
-  { title: "Danh mục", dataIndex: "category" },
-];
+  const mockLogins = [
+    { name: "Alice", avatar: "https://i.pravatar.cc/150?img=2" },
+    { name: "Bob", avatar: "https://i.pravatar.cc/150?img=3" },
+    { name: "Charlie", avatar: "https://i.pravatar.cc/150?img=4" },
+  ];
 
-const data = [
-  { key: "1", id: 1, name: "Laptop", price: "10,000,000 VNĐ", category: "Đồ điện tử" },
-  { key: "2", id: 2, name: "Phone", price: "7,000,000 VNĐ", category: "Đồ điện tử" },
-];
+  const handleMockLogin = (mockName: string, mockAvatar: string) => {
+    setUser({ name: mockName, avatar: mockAvatar });
+    alert(`✅ Đăng nhập thành công với tài khoản ${mockName}!`);
+  };
 
-export default function Lab() {
   return (
-    <>
-      <h2>Bài 1</h2>
-      <Table columns={columns1} dataSource={data1} />
+    <div style={{ padding: "50px 20px", minHeight: "80vh" }}>
+      <Row gutter={[24, 24]} justify="center">
+        <Col xs={24} sm={20} md={12} lg={8}>
+          <Card
+            title="🔐 Login Giả Lập"
+            bordered={false}
+            style={{ boxShadow: "0 2px 8px rgba(0,0,0,0.1)" }}
+          >
+            <Space direction="vertical" style={{ width: "100%" }} size="large">
+              <div>
+                <label style={{ display: "block", marginBottom: "8px" }}>
+                  Tên người dùng:
+                </label>
+                <Input
+                  placeholder="Nhập tên"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  onPressEnter={handleLogin}
+                />
+              </div>
 
-      <h2>Bài 3</h2>
-      <Table columns={columns2} dataSource={data2} />
+              <div>
+                <label style={{ display: "block", marginBottom: "8px" }}>
+                  Avatar URL:
+                </label>
+                <Input
+                  placeholder="Nhập URL avatar"
+                  value={avatar}
+                  onChange={(e) => setAvatar(e.target.value)}
+                  onPressEnter={handleLogin}
+                />
+              </div>
 
-      <h2>Bài 2</h2>
-      <Table
-        columns={columns}
-        dataSource={data}
-        pagination={{ pageSize: 3 }}
-      />
-    </>
+              <Button type="primary" block size="large" onClick={handleLogin}>
+                Đăng Nhập
+              </Button>
+
+              <div style={{ textAlign: "center", fontSize: "12px", color: "#999" }}>
+                Hoặc sử dụng tài khoản mẫu
+              </div>
+
+              {mockLogins.map((mock) => (
+                <Button
+                  key={mock.name}
+                  block
+                  onClick={() => handleMockLogin(mock.name, mock.avatar)}
+                  style={{ marginTop: "8px" }}
+                >
+                  👤 Đăng nhập với {mock.name}
+                </Button>
+              ))}
+            </Space>
+          </Card>
+        </Col>
+      </Row>
+    </div>
   );
-}
+};
+
+export default LoginPage;

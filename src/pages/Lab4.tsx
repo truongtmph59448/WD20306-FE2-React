@@ -1,70 +1,86 @@
-import { Form, Input, Button, Checkbox } from "antd";
-import { useMutation } from "@tanstack/react-query";
-import axios from "axios";
-import toast from "react-hot-toast";
+import { Card, Row, Col, Switch, Space, Typography, Divider } from "antd";
+import { BgColorsOutlined } from "@ant-design/icons";
+import { useTheme } from "../context/ThemeContext";
 
-interface Category {
-  title: string;
-  description?: string;
-  active?: boolean;
-}
-
-export default function Lab4() {
-  const [form] = Form.useForm();
-
-  const mutation = useMutation({
-    mutationFn: async (data: Category) => {
-      const res = await axios.post(
-        "http://localhost:3001/stories",
-        data
-      );
-      return res.data;
-    },
-
-    onSuccess: () => {
-      toast.success("Thêm danh mục thành công");
-      form.resetFields();
-    },
-
-    onError: () => {
-      toast.error("Có lỗi xảy ra");
-    },
-  });
-
-  const onFinish = (values: Category) => {
-    mutation.mutate(values);
-  };
+const ThemePage = () => {
+  const { themeMode, toggleTheme } = useTheme();
 
   return (
-    <Form
-      layout="vertical"
-      onFinish={onFinish}
-      form={form}
-      style={{ maxWidth: 500, margin: "0 auto" }}
-    >
-      <Form.Item
-        label="Title"
-        name="title"
-        rules={[{ required: true, message: "Không được để trống!" }]}
-      >
-        <Input />
-      </Form.Item>
+    <div style={{ padding: "50px 20px", minHeight: "80vh" }}>
+      <Row gutter={[24, 24]} justify="center">
+        <Col xs={24} sm={22} md={16} lg={12}>
+          <Card
+            title={
+              <Space>
+                <BgColorsOutlined style={{ fontSize: "20px" }} />
+                <span>🎨 Theme Toggle (Nâng cao)</span>
+              </Space>
+            }
+            bordered={false}
+            style={{ boxShadow: "0 2px 8px rgba(0,0,0,0.1)" }}
+          >
+            <Space direction="vertical" style={{ width: "100%" }} size="large">
+              <div>
+                <Typography.Title level={4}>
+                  Chế độ hiện tại: {themeMode === "dark" ? "🌙 Dark" : "☀️ Light"}
+                </Typography.Title>
 
-      <Form.Item label="Description" name="description">
-        <Input.TextArea rows={4} />
-      </Form.Item>
+                <Divider />
 
-      <Form.Item name="active" valuePropName="checked">
-        <Checkbox>Active</Checkbox>
-      </Form.Item>
+                <Space align="center">
+                  <span>Dark Mode:</span>
+                  <Switch
+                    checked={themeMode === "dark"}
+                    onChange={toggleTheme}
+                    checkedChildren="🌙"
+                    unCheckedChildren="☀️"
+                  />
+                </Space>
+              </div>
 
-      <Button
-        type="primary"
-        htmlType="submit"
-        loading={mutation.isPending}
-      >
-        Submit
-      </Button>
-    </Form>
+              <Divider />
+
+              <div>
+                <Typography.Title level={5}>✨ Tính năng:</Typography.Title>
+                <ul>
+                  <li>✓ Toggle Dark / Light mode</li>
+                  <li>✓ Tích hợp Ant Design theme</li>
+                  <li>✓ Tất cả component tự động thay đổi màu</li>
+                  <li>✓ Trang sẽ giữ theme khi reload (có thể thêm localStorage)</li>
+                </ul>
+              </div>
+
+              <Divider />
+
+              <div>
+                <Typography.Title level={5}>📝 Code Example:</Typography.Title>
+                <Card
+                  type="inner"
+                  style={{
+                    backgroundColor: themeMode === "dark" ? "#262626" : "#f5f5f5",
+                    overflow: "auto",
+                  }}
+                >
+                  <pre style={{ margin: 0, fontSize: "12px" }}>
+{`const { themeMode, toggleTheme } = useTheme();
+
+// Toggle theme
+<Switch 
+  checked={themeMode === "dark"}
+  onChange={toggleTheme}
+/>
+
+// Thay đổi style dựa vào theme
+const bgColor = themeMode === "dark" ? "#262626" : "#fff";`}
+                  </pre>
+                </Card>
+              </div>
+            </Space>
+          </Card>
+        </Col>
+      </Row>
+    </div>
   );
-}
+};
+
+export default ThemePage;

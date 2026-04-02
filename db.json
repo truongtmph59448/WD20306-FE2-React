@@ -1,15 +1,11 @@
 {
   "stories": [
     {
-      "id": 1,
       "title": "Dragon Ball",
       "author": "Akira Toriyama",
-      "description": "Câu chuyện về Goku và hành trình tìm ngọc rồng",
-      "year": 1984,
-      "genre": "Action",
       "image": "https://upload.wikimedia.org/wikipedia/vi/4/4f/Dragon_Ball_Super_artwork.jpg",
-      "views": 100000,
-      "createdAt": "2026-03-21"
+      "description": "Câu chuyện về Goku và hành trình tìm ngọc rồng",
+      "id": 1
     },
     {
       "id": 2,
@@ -34,7 +30,6 @@
       "createdAt": "2026-03-21"
     }
   ],
-  "categories": [
-  ],
+  "categories": [],
   "users": []
 }
