@@ -1,40 +1,32 @@
-import { createContext, useContext, useState } from "react";
-import { ConfigProvider, theme } from "antd";
+import { createContext, useState, ReactNode, useContext } from "react";
 
-export type ThemeMode = "light" | "dark";
+type Theme = "light" | "dark";
 
-export type ThemeContextType = {
-  themeMode: ThemeMode;
-  setThemeMode: (mode: ThemeMode) => void;
+interface ThemeContextType {
+  theme: Theme;
   toggleTheme: () => void;
-};
+}
 
-export const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
-
-export const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
-  const [themeMode, setThemeMode] = useState<ThemeMode>("light");
-
-  const toggleTheme = () => {
-    setThemeMode((prev) => (prev === "light" ? "dark" : "light"));
-  };
-
-  const antdTheme = {
-    algorithm: themeMode === "dark" ? theme.darkAlgorithm : theme.defaultAlgorithm,
-  };
-
-  return (
-    <ThemeContext.Provider value={{ themeMode, setThemeMode, toggleTheme }}>
-      <ConfigProvider theme={antdTheme}>
-        {children}
-      </ConfigProvider>
-    </ThemeContext.Provider>
-  );
-};
+const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 export const useTheme = () => {
   const context = useContext(ThemeContext);
-  if (context === undefined) {
-    throw new Error("useTheme must be used within a ThemeProvider");
+  if (!context) {
+    throw new Error("useTheme must be used within ThemeProvider");
   }
   return context;
+};
+
+export const ThemeProvider = ({ children }: { children: ReactNode }) => {
+  const [theme, setTheme] = useState<Theme>("light");
+
+  const toggleTheme = () => {
+    setTheme((prev) => (prev === "light" ? "dark" : "light"));
+  };
+
+  return (
+    <ThemeContext.Provider value={{ theme, toggleTheme }}>
+      {children}
+    </ThemeContext.Provider>
+  );
 };

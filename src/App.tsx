@@ -1,16 +1,28 @@
 import { Toaster } from "react-hot-toast";
 import { Link, Routes, Route } from "react-router-dom";
-import { Button, Layout } from "antd";
+import { Button, Layout, Avatar } from "antd";
 import Lab4 from "./pages/Lab4";
 import Lab5 from "./pages/Lab5";
 import Lab6 from "./pages/Lab6";
+import { useUser } from "./context/UserContext";
+import { useTheme } from "./context/ThemeContext";
 
 const { Header, Content, Footer } = Layout;
 
 function App() {
+  const { user, setUser } = useUser();
+  const { theme, toggleTheme } = useTheme();
+
   return (
     <>
-      <nav className="bg-blue-600 text-white shadow">
+      {/* NAVBAR */}
+      <nav
+        className="shadow"
+        style={{
+          background: theme === "dark" ? "#111" : "#2563eb",
+          color: "#fff",
+        }}
+      >
         <div className="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
           <Link to="/" className="text-xl font-semibold">
             <strong>WEB2091 App</strong>
@@ -22,14 +34,48 @@ function App() {
             <Link to="/lab4">Thêm mới</Link>
           </div>
 
-          <div className="hidden md:flex items-center space-x-6">
-            <Link to="#">Đăng nhập</Link>
-            <Link to="#">Đăng ký</Link>
+          {/* RIGHT SIDE */}
+          <div className="hidden md:flex items-center space-x-4">
+            {/* Theme toggle */}
+            <Button onClick={toggleTheme}>
+              {theme === "light" ? "Light" : "Dark"}
+            </Button>
+
+            {/* User */}
+            {user ? (
+              <>
+                <Avatar src={user.avatar} />
+                <span>{user.name}</span>
+                <Button danger onClick={() => setUser(null)}>
+                  Logout
+                </Button>
+              </>
+            ) : (
+              <Button
+                type="primary"
+                onClick={() =>
+                  setUser({
+                    name: "Truong",
+                    avatar: "f:\Downloads\FBDown.to_AQMfXHR1NpRLL96MNZKVZYxcz8_rN0Lf_vu4jjkbMNo2NKVl9kn1DysFdrEgodSvfmVvnaemBEb7kpD_oBpTAYoO-PBWvaSnFX72UTvP7ng8Eg_720p_(HD).mp4",
+                  })
+                }
+              >
+                Login
+              </Button>
+            )}
           </div>
         </div>
       </nav>
 
-      <div className="max-w-6xl mx-auto mt-10 px-4 text-center">
+      {/* CONTENT */}
+      <div
+        className="max-w-6xl mx-auto mt-10 px-4 text-center"
+        style={{
+          background: theme === "dark" ? "#222" : "#fff",
+          color: theme === "dark" ? "#fff" : "#000",
+          minHeight: "100vh",
+        }}
+      >
         <h1 className="text-4xl font-bold mb-4">
           Chào mừng đến với WEB2091
         </h1>
