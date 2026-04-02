@@ -1,30 +1,48 @@
-import { Button } from "antd";
-import { useUser } from "../context/UserContext";
+import { Form, Input, Button, message } from "antd";
+import { useMutation } from "@tanstack/react-query";
+import axios from "axios";
+import { useAuthStore } from "../stores/useAuthStore";
 
 const Login = () => {
-  const { setUser } = useUser();
+  const { setUser } = useAuthStore();
 
-  const handleLogin = () => {
-    setUser({
-      name: "Truong",
-      avatar: "f:\Downloads\FBDown.to_AQMfXHR1NpRLL96MNZKVZYxcz8_rN0Lf_vu4jjkbMNo2NKVl9kn1DysFdrEgodSvfmVvnaemBEb7kpD_oBpTAYoO-PBWvaSnFX72UTvP7ng8Eg_720p_(HD).mp4",
-    });
-  };
+  const { mutate, isPending } = useMutation({
+    mutationFn: async (values: any) => {
+      return await axios.post("http://localhost:3000/login", values);
+    },
 
-  const handleLogout = () => {
-    setUser(null);
+    onSuccess: ({ data }) => {
+      setUser({
+        user: data.user,
+        token: data.accessToken,
+      });
+
+      message.success("Đăng nhập thành công!");
+    },
+
+    onError: () => {
+      message.error("Sai email hoặc password!");
+    },
+  });
+
+  const onFinish = (values: any) => {
+    mutate(values);
   };
 
   return (
-    <div style={{ padding: 20 }}>
-      <Button type="primary" onClick={handleLogin}>
-        Login
-      </Button>
+    <Form layout="vertical" onFinish={onFinish} style={{ maxWidth: 400, margin: "50px auto" }}>
+      <Form.Item name="email" label="Email" rules={[{ required: true }]}>
+        <Input />
+      </Form.Item>
 
-      <Button danger onClick={handleLogout} style={{ marginLeft: 10 }}>
-        Logout
+      <Form.Item name="password" label="Password" rules={[{ required: true }]}>
+        <Input.Password />
+      </Form.Item>
+
+      <Button type="primary" htmlType="submit" loading={isPending} block>
+        Đăng nhập
       </Button>
-    </div>
+    </Form>
   );
 };
 

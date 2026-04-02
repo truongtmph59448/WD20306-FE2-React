@@ -15,7 +15,7 @@ export default function Lab4() {
   const mutation = useMutation({
     mutationFn: async (data: Category) => {
       const res = await axios.post(
-        "http://localhost:3001/stories",
+        "http://localhost:3000/stories",
         data
       );
       return res.data;

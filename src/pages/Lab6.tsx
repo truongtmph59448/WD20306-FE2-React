@@ -14,7 +14,7 @@ const EditStory = () => {
   const { data, isLoading } = useQuery({
     queryKey: ["story", id],
     queryFn: async () => {
-      const res = await axios.get(`http://localhost:3001/stories/${id}`);
+      const res = await axios.get(`http://localhost:3000/stories/${id}`);
       return res.data;
     },
   });
@@ -27,7 +27,7 @@ const EditStory = () => {
 
   const mutation = useMutation({
     mutationFn: async (values: any) => {
-      return axios.put(`http://localhost:3001/stories/${id}`, values);
+      return axios.put(`http://localhost:3000/stories/${id}`, values);
     },
     onSuccess: () => {
       toast.success("Cập nhật thành công");

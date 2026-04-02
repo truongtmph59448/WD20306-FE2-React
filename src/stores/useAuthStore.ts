@@ -1,9 +1,30 @@
-import {create} from "zustand";
+import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
-export type AuthState = {
-    user: any;
-    token: string | null;
+interface AuthState {
+  user: any;
+  token: string | null;
 
-    setUser: (data: {})
+  setUser: (data: { user: any; token: string }) => void;
+  logout: () => void;
 }
+
+export const useAuthStore = create<AuthState>()(
+  persist(
+    (set) => ({
+      user: null,
+      token: null,
+
+      setUser: ({ user, token }) => {
+        set({ user, token });
+      },
+
+      logout: () => {
+        set({ user: null, token: null });
+      },
+    }),
+    {
+      name: "auth-storage",
+    }
+  )
+);

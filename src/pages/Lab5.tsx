@@ -10,14 +10,14 @@ const StoryList = () => {
   const { data, isLoading, isError } = useQuery({
     queryKey: ["stories"],
     queryFn: async () => {
-      const res = await axios.get("http://localhost:3001/stories");
+      const res = await axios.get("http://localhost:3000/stories");
       return res.data;
     },
   });
 
   const deleteMutation = useMutation({
     mutationFn: async (id: number) => {
-      await axios.delete(`http://localhost:3001/stories/${id}`);
+      await axios.delete(`http://localhost:3000/stories/${id}`);
     },
     onSuccess: () => {
       message.success("Xóa thành công");

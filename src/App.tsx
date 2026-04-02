@@ -1,16 +1,18 @@
 import { Toaster } from "react-hot-toast";
 import { Link, Routes, Route } from "react-router-dom";
-import { Button, Layout, Avatar } from "antd";
+import { Button, Layout } from "antd";
 import Lab4 from "./pages/Lab4";
 import Lab5 from "./pages/Lab5";
 import Lab6 from "./pages/Lab6";
-import { useUser } from "./context/UserContext";
+import Login from "./components/Login";
+import Register from "./components/Register";
+import { useAuthStore } from "./stores/useAuthStore";
 import { useTheme } from "./context/ThemeContext";
 
 const { Header, Content, Footer } = Layout;
 
 function App() {
-  const { user, setUser } = useUser();
+  const { user, logout } = useAuthStore();
   const { theme, toggleTheme } = useTheme();
 
   return (
@@ -36,32 +38,25 @@ function App() {
 
           {/* RIGHT SIDE */}
           <div className="hidden md:flex items-center space-x-4">
-            {/* Theme toggle */}
+            {/* Theme */}
             <Button onClick={toggleTheme}>
               {theme === "light" ? "Light" : "Dark"}
             </Button>
 
-            {/* User */}
+            {/* Auth */}
             {user ? (
               <>
-                <Avatar src={user.avatar} />
-                <span>{user.name}</span>
-                <Button danger onClick={() => setUser(null)}>
+                <span>{user.user?.email}</span>
+                <span>Đã đăng nhập</span>
+                <Button danger onClick={logout}>
                   Logout
                 </Button>
               </>
             ) : (
-              <Button
-                type="primary"
-                onClick={() =>
-                  setUser({
-                    name: "Truong",
-                    avatar: "f:\Downloads\FBDown.to_AQMfXHR1NpRLL96MNZKVZYxcz8_rN0Lf_vu4jjkbMNo2NKVl9kn1DysFdrEgodSvfmVvnaemBEb7kpD_oBpTAYoO-PBWvaSnFX72UTvP7ng8Eg_720p_(HD).mp4",
-                  })
-                }
-              >
-                Login
-              </Button>
+              <>
+                <Link to="/login">Đăng nhập</Link>
+                <Link to="/register">Đăng ký</Link>
+              </>
             )}
           </div>
         </div>
@@ -89,6 +84,10 @@ function App() {
               <Route path="/list" element={<Lab5 />} />
               <Route path="/lab4" element={<Lab4 />} />
               <Route path="/edit/:id" element={<Lab6 />} />
+
+              {/* AUTH */}
+              <Route path="/login" element={<Login />} />
+              <Route path="/register" element={<Register />} />
             </Routes>
           </Content>
 

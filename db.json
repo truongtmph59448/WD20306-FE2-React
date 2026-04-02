@@ -31,5 +31,14 @@
     }
   ],
   "categories": [],
-  "users": []
+  "users": [
+    {
+      "email": "tmtruong2505@gmail.com",
+      "password": "$2a$10$gAQaRLCWvAPmxcv.LP9CaeaVrUdFQRAVuNkNJ/BN3N/V4AGM3oVLy",
+      "username": "Truong",
+      "id": 1
+    }
+  ],
+  "login": [],
+  "register": []
 }
