@@ -1,32 +1,10 @@
 import { Table, Image, Spin, Button, Popconfirm, message } from "antd";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { useCRUDStory } from "../hooks/useCRUDStory";
 
 const StoryList = () => {
-  const queryClient = useQueryClient();
   const navigate = useNavigate();
-
-  const { data, isLoading, isError } = useQuery({
-    queryKey: ["stories"],
-    queryFn: async () => {
-      const res = await axios.get("http://localhost:3000/stories");
-      return res.data;
-    },
-  });
-
-  const deleteMutation = useMutation({
-    mutationFn: async (id: number) => {
-      await axios.delete(`http://localhost:3000/stories/${id}`);
-    },
-    onSuccess: () => {
-      message.success("Xóa thành công");
-      queryClient.invalidateQueries({ queryKey: ["stories"] });
-    },
-    onError: () => {
-      message.error("Xóa thất bại");
-    },
-  });
+  const { list, isLoading, isError, remove } = useCRUDStory();
 
   const formatDate = (date: string) => {
     if (!date) return "";
@@ -78,9 +56,12 @@ const StoryList = () => {
 
           <Popconfirm
             title="Bạn chắc chắn muốn xóa?"
-            onConfirm={() => deleteMutation.mutate(record.id)}
+            onConfirm={() => remove.mutate(record.id, {
+              onSuccess: () => message.success("Xóa thành công"),
+              onError: () => message.error("Xóa thất bại"),
+            })}
           >
-            <Button danger loading={deleteMutation.isPending}>
+            <Button danger loading={remove.isPending}>
               Xóa
             </Button>
           </Popconfirm>
@@ -95,7 +76,7 @@ const StoryList = () => {
   return (
     <Table
       columns={columns}
-      dataSource={data}
+      dataSource={list}
       rowKey="id"
       pagination={{ pageSize: 5 }}
     />

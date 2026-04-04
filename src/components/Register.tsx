@@ -11,7 +11,7 @@ const Register = () => {
       return await axios.post("http://localhost:3000/register", values);
     },
 
-    onSuccess: async (res, variables) => {
+    onSuccess: async (_, variables) => {
       message.success("Đăng ký thành công!");
 
       const loginRes = await axios.post("http://localhost:3000/login", {

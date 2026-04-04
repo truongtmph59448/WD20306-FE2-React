@@ -1,7 +1,6 @@
 import { Form, Input, Button, Checkbox } from "antd";
-import { useMutation } from "@tanstack/react-query";
-import axios from "axios";
 import toast from "react-hot-toast";
+import { useCRUDStory } from "../hooks/useCRUDStory";
 
 interface Category {
   title: string;
@@ -11,28 +10,18 @@ interface Category {
 
 export default function Lab4() {
   const [form] = Form.useForm();
-
-  const mutation = useMutation({
-    mutationFn: async (data: Category) => {
-      const res = await axios.post(
-        "http://localhost:3000/stories",
-        data
-      );
-      return res.data;
-    },
-
-    onSuccess: () => {
-      toast.success("Thêm danh mục thành công");
-      form.resetFields();
-    },
-
-    onError: () => {
-      toast.error("Có lỗi xảy ra");
-    },
-  });
+  const { add } = useCRUDStory();
 
   const onFinish = (values: Category) => {
-    mutation.mutate(values);
+    add.mutate(values, {
+      onSuccess: () => {
+        toast.success("Thêm danh mục thành công");
+        form.resetFields();
+      },
+      onError: () => {
+        toast.error("Có lỗi xảy ra");
+      },
+    });
   };
 
   return (
@@ -61,7 +50,7 @@ export default function Lab4() {
       <Button
         type="primary"
         htmlType="submit"
-        loading={mutation.isPending}
+        loading={add.isPending}
       >
         Submit
       </Button>

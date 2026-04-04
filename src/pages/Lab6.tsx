@@ -1,15 +1,15 @@
 import { Form, Input, Button, Spin } from "antd";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { useParams, useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import toast from "react-hot-toast";
+import { useUpdateStory } from "../hooks/useUpdateStory";
 
 const EditStory = () => {
   const [form] = Form.useForm();
   const { id } = useParams();
   const navigate = useNavigate();
-  const queryClient = useQueryClient();
 
   const { data, isLoading } = useQuery({
     queryKey: ["story", id],
@@ -25,22 +25,18 @@ const EditStory = () => {
     }
   }, [data]);
 
-  const mutation = useMutation({
-    mutationFn: async (values: any) => {
-      return axios.put(`http://localhost:3000/stories/${id}`, values);
-    },
-    onSuccess: () => {
-      toast.success("Cập nhật thành công");
-      queryClient.invalidateQueries({ queryKey: ["stories"] });
-      navigate("/");
-    },
-    onError: () => {
-      toast.error("Có lỗi xảy ra");
-    },
-  });
+  const updateMutation = useUpdateStory(id!);
 
   const onFinish = (values: any) => {
-    mutation.mutate(values);
+    updateMutation.mutate(values, {
+      onSuccess: () => {
+        toast.success("Cập nhật thành công");
+        navigate("/");
+      },
+      onError: () => {
+        toast.error("Có lỗi xảy ra");
+      },
+    });
   };
 
   if (isLoading) return <Spin />;
@@ -50,7 +46,7 @@ const EditStory = () => {
       form={form}
       layout="vertical"
       onFinish={onFinish}
-      disabled={mutation.isPending}
+      disabled={updateMutation.isPending}
     >
       <Form.Item
         name="title"
@@ -76,7 +72,7 @@ const EditStory = () => {
         <Input.TextArea />
       </Form.Item>
 
-      <Button type="primary" htmlType="submit" loading={mutation.isPending}>
+      <Button type="primary" htmlType="submit" loading={updateMutation.isPending}>
         Cập nhật
       </Button>
     </Form>
